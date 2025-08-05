@@ -1,59 +1,86 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:task_app/application/controlador_tareas.dart';
-import 'package:task_app/models/task_model.dart';
+import 'package:task_app/application/controlador_asignaturas.dart';
+import 'package:task_app/models/subject_model.dart';
 
-// ¡Hola, Kat! Esta es la pantalla principal por ahora.
-// Cuando tengas el diseño final, reemplazas esto con tu magia.
-// El botón de '+' ya funciona para añadir tareas, ¡no lo toques! ;)
 class PantallaHome extends StatelessWidget {
   const PantallaHome({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // Aquí metemos el controlador de tareas. Usamos '1' como ID de asignatura de prueba.
-    // Get.put es listo, se asegura de que no creemos el mismo controlador dos veces.
-    final ControladorTareas controlador = Get.put(ControladorTareas('1'));
+    final ControladorAsignaturas controlador = Get.put(ControladorAsignaturas());
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Mis Tareas')),
+      appBar: AppBar(title: const Text('Mis Asignaturas')),
       body: Obx(() {
-        // Obx es como un chismoso, se entera si los datos cambian y redibuja el widget.
         if (controlador.estaCargando.value) {
           return const Center(child: CircularProgressIndicator());
         }
-
-        if (controlador.tareas.isEmpty) {
-          return const Center(
-            child: Text('No hay tareas. ¡Añade una!'),
-          );
+        if (controlador.asignaturas.isEmpty) {
+          return const Center(child: Text('No hay asignaturas. ¡Agregaaa!'));
         }
-
-        // Kat, aquí va la chicha. Cambia este ListView por tu diseño molón.
-        // Toda la info que necesitas está en `controlador.tareas`.
         return ListView.builder(
-          itemCount: controlador.tareas.length,
+          itemCount: controlador.asignaturas.length,
           itemBuilder: (context, index) {
-            final tarea = controlador.tareas[index];
+            final asignatura = controlador.asignaturas[index];
             return ListTile(
-              title: Text(tarea.titulo),
-              subtitle: Text(tarea.descripcion),
-              trailing: Checkbox(
-                value: tarea.estaCompletada,
-                onChanged: (valor) {
-                  controlador.marcarComoCompletada(tarea.id);
-                },
+              title: Text(asignatura.nombre),
+              onTap: () {
+                Get.toNamed('/tareas_por_asignatura', arguments: asignatura);
+              },
+              trailing: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.edit),
+                    onPressed: () => _mostrarDialogoGuardarAsignatura(context, controlador, asignatura: asignatura),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.delete),
+                    onPressed: () => controlador.eliminarAsignatura(asignatura.id),
+                  ),
+                ],
               ),
-              onTap: () => Get.toNamed('/detalle_tarea', arguments: tarea),
             );
           },
         );
       }),
-      // Este es el botón flotante para añadir tareas nuevas.
       floatingActionButton: FloatingActionButton(
-        onPressed: () => Get.toNamed('/agregar_editar_tarea'),
+        onPressed: () => _mostrarDialogoGuardarAsignatura(context, controlador),
         child: const Icon(Icons.add),
-        tooltip: 'Añadir Tarea', // Un mensajito de ayuda por si alguien no sabe para qué es el botón.
+        tooltip: 'Añadir Asignatura',
+      ),
+    );
+  }
+
+  // --- Diálogo para Añadir/Editar Asignatura ---
+  void _mostrarDialogoGuardarAsignatura(BuildContext context, ControladorAsignaturas controlador, {Asignatura? asignatura}) {
+    final TextEditingController textController = TextEditingController(text: asignatura?.nombre ?? '');
+    final esEdicion = asignatura != null;
+
+    Get.defaultDialog(
+      title: esEdicion ? 'Editar Asignatura' : 'Nueva Asignatura',
+      content: TextField(
+        controller: textController,
+        decoration: const InputDecoration(labelText: 'Nombre de la asignatura'),
+        autofocus: true,
+      ),
+      confirm: ElevatedButton(
+        onPressed: () {
+          if (textController.text.isNotEmpty) {
+            if (esEdicion) {
+              controlador.actualizarAsignatura(asignatura.id, textController.text);
+            } else {
+              controlador.agregarAsignatura(textController.text);
+            }
+            Get.back(); // cierra dialogo
+          }
+        },
+        child: const Text('Guardar'),
+      ),
+      cancel: TextButton(
+        onPressed: () => Get.back(),
+        child: const Text('Cancelar'),
       ),
     );
   }

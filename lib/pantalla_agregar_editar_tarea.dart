@@ -1,29 +1,51 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart'; // necesario para formatear la fecha
 import 'package:task_app/application/controlador_tareas.dart';
 import 'package:task_app/models/task_model.dart';
 
-// ¡Hola, Kat! Este es el formulario para añadir (y luego editar) tareas.
-// Te toca a ti dejarlo bonito con un buen diseño.
-// Ya tienes los `TextEditingController` para los campos, ¡úsalos a tu gusto!
-class PantallaAgregarEditarTarea extends StatelessWidget {
+//KAT: formulario para añadir y editar tareas
+
+class PantallaAgregarEditarTarea extends StatefulWidget {
   const PantallaAgregarEditarTarea({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    // Buscamos el controlador que ya creamos en la pantalla principal.
-    final ControladorTareas controlador = Get.find<ControladorTareas>();
+  State<PantallaAgregarEditarTarea> createState() => _PantallaAgregarEditarTareaState();
+}
 
-    // Controladores para que los campos de texto funcionen.
-    final _tituloController = TextEditingController();
-    final _descripcionController = TextEditingController();
+class _PantallaAgregarEditarTareaState extends State<PantallaAgregarEditarTarea> {
+  final _tituloController = TextEditingController();
+  final _descripcionController = TextEditingController();
+  final _fechaEntregaController = TextEditingController();
+  DateTime? _fechaSeleccionada;
+
+  String? idAsignatura;
+  Tarea? tareaParaEditar;
+  bool esEdicion = false;
+
+  @override
+  void initState() {
+    super.initState();
+    idAsignatura = Get.arguments is String ? Get.arguments : null;
+    tareaParaEditar = Get.arguments is Tarea ? Get.arguments : null;
+    esEdicion = tareaParaEditar != null;
+
+    if (esEdicion) {
+      _tituloController.text = tareaParaEditar!.titulo;
+      _descripcionController.text = tareaParaEditar!.descripcion;
+      _fechaSeleccionada = tareaParaEditar!.fechaEntrega;
+      _fechaEntregaController.text = DateFormat('dd/MM/yyyy').format(_fechaSeleccionada!); //formatear para mostrar
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final ControladorTareas controlador = Get.put(ControladorTareas(idAsignatura ?? tareaParaEditar?.idAsignatura ?? '1'));
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Añadir Tarea')),
+      appBar: AppBar(title: Text(esEdicion ? 'Editar Tarea' : 'Añadir Tarea')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        // Kat, aquí va tu formulario. Este es solo un esqueleto.
-        // Los controladores de texto están listos para que los conectes.
         child: Form(
           child: Column(
             children: [
@@ -36,25 +58,58 @@ class PantallaAgregarEditarTarea extends StatelessWidget {
                 controller: _descripcionController,
                 decoration: const InputDecoration(labelText: 'Descripción'),
               ),
+              const SizedBox(height: 16),
+              TextFormField(
+                controller: _fechaEntregaController,
+                decoration: const InputDecoration(
+                  labelText: 'Fecha de Entrega',
+                  suffixIcon: Icon(Icons.calendar_today),
+                ),
+                readOnly: true, //para que no se pueda escribir directamente
+                onTap: () async {
+                  //abre selector de fecha
+                  final DateTime? picked = await showDatePicker(
+                    context: context,
+                    initialDate: _fechaSeleccionada ?? DateTime.now(),
+                    firstDate: DateTime(2000),
+                    lastDate: DateTime(2101),
+                  );
+                  if (picked != null && picked != _fechaSeleccionada) {
+                    setState(() {
+                      _fechaSeleccionada = picked;
+                      _fechaEntregaController.text = DateFormat('dd/MM/yyyy').format(picked);
+                    });
+                  }
+                },
+              ),
               const SizedBox(height: 32),
               ElevatedButton(
                 onPressed: () {
-                  // Creamos una tarea nueva con lo que el usuario escribió.
-                  final nuevaTarea = Tarea(
-                    id: DateTime.now().toString(), // ID de mentirijilla, por ahora.
-                    idAsignatura: controlador.idAsignatura, // La asignatura que estamos viendo.
-                    titulo: _tituloController.text,
-                    descripcion: _descripcionController.text,
-                    fechaEntrega: DateTime.now(), // Fecha de mentirijilla también.
-                  );
+                  if (_tituloController.text.isEmpty || _fechaSeleccionada == null) {
+                    Get.snackbar('Error', 'Agregue el título y seleccione una fecha de entrega.');
+                    return;
+                  }
 
-                  // Le pasamos la tarea al controlador para que la guarde.
-                  controlador.agregarTarea(nuevaTarea);
-
-                  // ¡Y nos vamos! Volvemos a la pantalla anterior.
+                  if (esEdicion) {
+                    final tareaActualizada = tareaParaEditar!.copyWith(
+                      titulo: _tituloController.text,
+                      descripcion: _descripcionController.text,
+                      fechaEntrega: _fechaSeleccionada!,
+                    );
+                    controlador.actualizarTarea(tareaActualizada);
+                  } else {
+                    final nuevaTarea = Tarea(
+                      id: DateTime.now().toString(),
+                      idAsignatura: idAsignatura!,
+                      titulo: _tituloController.text,
+                      descripcion: _descripcionController.text,
+                      fechaEntrega: _fechaSeleccionada!,
+                    );
+                    controlador.agregarTarea(nuevaTarea);
+                  }
                   Get.back();
                 },
-                child: const Text('Guardar Tarea'),
+                child: Text(esEdicion ? 'Guardar Cambios' : 'Guardar Tarea'),
               ),
             ],
           ),

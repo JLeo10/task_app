@@ -1,19 +1,15 @@
-'''import 'package:get/get.dart';
+import 'package:get/get.dart';
 import 'package:task_app/data/providers/subject_provider.dart';
 import 'package:task_app/models/subject_model.dart';
 
-// --- Controlador de Asignaturas ---
-//
-// ¿Para qué sirve?
-// Este controlador se encarga de gestionar el estado de las asignaturas.
-// Su responsabilidad es:
-// 1. Obtener la lista de todas las asignaturas desde el `ProveedorAsignaturas`.
-// 2. Almacenar esta lista en una variable reactiva (`.obs`) para que la UI se
-//    actualice automáticamente cuando los datos cambien.
-// 3. Proporcionar métodos para que la vista pueda añadir, eliminar o actualizar asignaturas.
-//
-// KAT: Cuando necesites mostrar la lista de asignaturas (por ejemplo, en un Dropdown),
-//      simplemente obtendrás una instancia de este controlador y accederás a `asignaturas.value`.
+// controlador de asignaturas
+// gestiona estado de asignaturas
+// obtiene lista de asignaturas de proveedorasignaturas
+// almacena lista en variable reactiva .obs
+// ui se actualiza automaticamente
+// provee metodos para crud de asignaturas
+// kat: para mostrar asignaturas, usa este controlador
+// accede a asignaturas.value
 class ControladorAsignaturas extends GetxController {
   // Instancia del proveedor de datos de asignaturas.
   final ProveedorAsignaturas _proveedorAsignaturas = ProveedorAsignaturas();
@@ -60,5 +56,16 @@ class ControladorAsignaturas extends GetxController {
     // Volvemos a cargar la lista para reflejar el cambio.
     cargarAsignaturas();
   }
+
+  // Lógica para actualizar una asignatura.
+  void actualizarAsignatura(String id, String nuevoNombre) async {
+    await _proveedorAsignaturas.actualizarAsignatura(id, nuevoNombre);
+    cargarAsignaturas();
+  }
+
+  // elimina asignatura
+  void eliminarAsignatura(String id) async {
+    await _proveedorAsignaturas.eliminarAsignatura(id);
+    cargarAsignaturas();
+  }
 }
-''

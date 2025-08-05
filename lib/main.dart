@@ -11,9 +11,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       title: 'Task App',
-      debugShowCheckedModeBanner: false, // Oculta la cinta de debug
-      initialRoute: '/login', // La app empieza en la pantalla de login
-      getPages: AppRutas.rutas, // Usa las rutas definidas
+      debugShowCheckedModeBanner: false, //oculta  debug
+      initialRoute: '/login', //app empieza en la pantalla de login
+      getPages: AppRutas.rutas, //usa rutas definidas
     );
   }
 }

@@ -1,6 +1,6 @@
 import 'package:task_app/models/subject_model.dart';
 
-// Modelo para las tareas de la aplicación.
+// Modelo para las tareas de la aplicación
 class Tarea {
   String id;
   String idAsignatura;
@@ -18,29 +18,47 @@ class Tarea {
     this.estaCompletada = false,
   });
 
-  // Método para convertir un objeto Tarea a un mapa JSON.
-  // Leo lo necesitará para guardar los datos en GetStorage.
+  //metodo convertir un objeto Tarea a un mapa JSON
+  //LEO lo ocuapara para guardar los datos en GetStorage
   Map<String, dynamic> toJson() {
     return {
       'id': id,
       'idAsignatura': idAsignatura,
       'titulo': titulo,
       'descripcion': descripcion,
-      'fechaEntrega': fechaEntrega.toIso8601String(), // Guardamos la fecha en formato estándar
+      'fechaEntrega': fechaEntrega.toIso8601String(), //guardamos la fecha en formato estándar
       'estaCompletada': estaCompletada,
     };
   }
 
-  // Método para crear un objeto Tarea desde un mapa JSON.
-  // Leo lo usará para leer los datos guardados.
+  //metodo crear un objeto Tarea desde un mapa JSON
   factory Tarea.fromJson(Map<String, dynamic> json) {
     return Tarea(
       id: json['id'],
       idAsignatura: json['idAsignatura'],
       titulo: json['titulo'],
       descripcion: json['descripcion'],
-      fechaEntrega: DateTime.parse(json['fechaEntrega']), // Convertimos el string a DateTime
+      fechaEntrega: DateTime.parse(json['fechaEntrega']),     //convierte string a datetime
       estaCompletada: json['estaCompletada'],
+    );
+  }
+
+  //metodo copyWith para facilitar la creación de nuevas instancias con propiedades modificadas
+  Tarea copyWith({
+    String? id,
+    String? idAsignatura,
+    String? titulo,
+    String? descripcion,
+    DateTime? fechaEntrega,
+    bool? estaCompletada,
+  }) {
+    return Tarea(
+      id: id ?? this.id,
+      idAsignatura: idAsignatura ?? this.idAsignatura,
+      titulo: titulo ?? this.titulo,
+      descripcion: descripcion ?? this.descripcion,
+      fechaEntrega: fechaEntrega ?? this.fechaEntrega,
+      estaCompletada: estaCompletada ?? this.estaCompletada,
     );
   }
 }

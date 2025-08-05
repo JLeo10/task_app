@@ -1,61 +1,60 @@
-# Plan de Trabajo - Task App
+plan de trabajo - task app
 
-Este archivo documenta el plan de trabajo y las responsabilidades de cada miembro del equipo.
+este archivo documenta el plan de trabajo y las responsabilidades de cada miembro del equipo
 
-## Roles
+roles
 
-*   **Leo:** Gestión de estado con GetX, persistencia de datos (GetStorage/Firebase) y APIs simuladas.
-*   **Kat:** Interfaz de usuario (UI), validaciones de formularios y vistas de tareas.
-*   **Andy:** Navegación, flujo de la aplicación, manejo de fechas, notificaciones y CRUD de asignaturas y tareas.
+* leo: gestion de estado con getx, persistencia de datos (getstorage/firebase) y apis simuladas
+* kat: interfaz de usuario (ui), validaciones de formularios y vistas de tareas
+* andy: navegacion, flujo de la aplicacion, manejo de fechas, notificaciones y crud de asignaturas y tareas
 
----
+estado actual del proyecto (5 de agosto de 2025)
 
-## Estado Actual del Proyecto (5 de Agosto de 2025)
+implementado
 
-### ✅ Implementado
+* crud de asignaturas funcional (datos simulados)
+  * ver lista de asignaturas: pantallahome muestra todas las asignaturas
+  * añadir nuevas asignaturas: dialogo permite crear asignaturas
+  * editar asignaturas: permite cambiar nombre de asignaturas existentes
+  * eliminar asignaturas: permite borrar asignaturas de la lista
+* crud de tareas funcional (datos simulados)
+  * ver lista de tareas: pantallatareaporasignatura muestra tareas de asignatura especifica
+  * añadir nuevas tareas: permite añadir tareas asociadas a una asignatura
+  * editar tareas: permite editar tareas existentes
+  * marcar tareas como completadas: permite cambiar estado de una tarea
+  * eliminar tareas: permite borrar una tarea
+* navegacion
+  * de pantallahome a pantallatareaporasignatura (pasando la asignatura)
+  * de pantallatareaporasignatura a pantallaagregareditartarea (para añadir tareas a la asignatura actual)
+  * de pantalladetalltarea a pantallaagregareditartarea (para editar una tarea existente)
+* manejo de fechas
+  * implementado datepicker en pantallaagregareditartarea para seleccionar fecha de entrega
+  * fecha de entrega se muestra formateada en pantalladetalltarea
+* gestion de estado con getx
+  * controladorasignaturas y controladortareas manejan la logica de negocio
 
-*   **CRUD de Asignaturas Funcional (con datos simulados):**
-    *   **Ver la lista de asignaturas:** La `PantallaHome` ahora muestra todas las asignaturas.
-    *   **Añadir nuevas asignaturas:** Un diálogo permite crear asignaturas.
-    *   **Editar asignaturas:** Se puede cambiar el nombre de las asignaturas existentes.
-    *   **Eliminar asignaturas:** Se pueden borrar asignaturas de la lista.
-*   **CRUD de Tareas Funcional (con datos simulados):**
-    *   **Ver la lista de tareas:** `PantallaTareasPorAsignatura` muestra las tareas de una asignatura específica.
-    *   **Añadir nuevas tareas:** Se pueden añadir tareas asociadas a una asignatura.
-    *   **Editar tareas:** Se pueden editar tareas existentes.
-    *   **Marcar tareas como completadas:** Se puede cambiar el estado de una tarea.
-    *   **Eliminar tareas:** Se puede borrar una tarea.
-*   **Navegación:**
-    *   De `PantallaHome` a `PantallaTareasPorAsignatura` (pasando la asignatura).
-    *   De `PantallaTareasPorAsignatura` a `PantallaAgregarEditarTarea` (para añadir tareas a la asignatura actual).
-    *   De `PantallaDetalleTarea` a `PantallaAgregarEditarTarea` (para editar una tarea existente).
-*   **Manejo de Fechas:**
-    *   Implementado `DatePicker` en `PantallaAgregarEditarTarea` para seleccionar la fecha de entrega.
-    *   La fecha de entrega se muestra formateada en `PantallaDetalleTarea`.
-*   **Gestión de Estado con GetX:**
-    *   `ControladorAsignaturas` y `ControladorTareas` manejan la lógica de negocio.
+para kat (diseño de ui)
 
-### 🎨 Para Kat (Diseño de UI)
+* reemplazar vistas temporales
+  * pantallahome: necesita nuevo diseño para mostrar lista de asignaturas
+  * pantallaagregareditartarea: crear formulario funcional para añadir/editar tareas
+  * pantalladetalltarea: requiere diseño para mostrar detalles de una tarea
+  * pantallatareaporasignatura: necesita diseño para mostrar tareas de una asignatura
+  * diseñar dialogo de añadir/editar asignatura en pantallahome
+* componentes a crear
+  * selector de asignaturas en formulario de tareas
+  * selector de fecha (datepicker) en formulario
 
-*   **Reemplazar Vistas Temporales:**
-    *   `pantalla_home.dart`: Necesita un nuevo diseño para mostrar la lista de asignaturas.
-    *   `pantalla_agregar_editar_tarea.dart`: Hay que crear un formulario bonito y funcional para añadir/editar tareas.
-    *   `pantalla_detalle_tarea.dart`: Requiere un diseño para mostrar todos los detalles de una tarea.
-    *   `pantalla_tareas_por_asignatura.dart`: Necesita un diseño para mostrar las tareas de una asignatura.
-    *   **Nuevo:** Diseñar el diálogo de `Añadir/Editar Asignatura` que se muestra en la `PantallaHome`.
-*   **Componentes a Crear:**
-    *   Un selector de asignaturas en el formulario de tareas.
-    *   Un selector de fecha (`DatePicker`) en el formulario.
+para leo (datos y backend)
 
-### 💾 Para Leo (Datos y Backend)
+* implementar persistencia con getstorage
+  * reemplazar logica simulada en proveedortareas y proveedorasignaturas
+  * metodos (agregartarea, eliminarasignatura, etc) deben guardar y leer datos de getstorage
+* ids reales
+  * creacion de tareas y asignaturas usa id temporal (datetime.now)
+  * cambiar por sistema de ids mas robusto (ej contador o uuid)
 
-*   **Implementar Persistencia con GetStorage:**
-    *   Reemplazar la lógica simulada en `ProveedorTareas` y `ProveedorAsignaturas`.
-    *   Los métodos (`agregarTarea`, `eliminarAsignatura`, etc.) deben ahora guardar y leer los datos de GetStorage en lugar de usar listas en memoria.
-*   **IDs Reales:**
-    *   La creación de tareas y asignaturas actualmente usa un ID temporal (`DateTime.now()`). Hay que cambiarlo por un sistema de IDs más robusto (ej. un contador o un UUID).
+proximos pasos (andy)
 
-### 🚀 Próximos Pasos (Andy)
-
-*   Revisión general del código para optimización y adherencia a las mejores prácticas.
-*   Refactorización de comentarios para seguir un estilo consistente y conciso.
+* revision general del codigo para optimizacion y adherencia a mejores practicas
+* refactorizacion de comentarios para seguir estilo consistente y conciso

@@ -8,17 +8,9 @@ class ProveedorTareas {
     Tarea(
       id: '1',
       idAsignatura: '1',
-      titulo: 'Hacer mango en bolsa',
-      descripcion: 'comprar condimentos',
-      fechaEntrega: DateTime.now().add(const Duration(days: 2)),
-    ),
-    Tarea(
-      id: '2',
-      idAsignatura: '2',
-      titulo: 'Etudiar pa Examen',
-      descripcion: 'Mejor buscamos guia con chatgpt',
-      fechaEntrega: DateTime.now().add(const Duration(days: 5)),
-      estaCompletada: true,
+      titulo: 'Hacer ensalada de mango',
+      descripcion: 'Preparar una deliciosa ensalada de mango.',
+      fechaEntrega: DateTime.now().add(const Duration(days: 1)),
     ),
   ];
 

@@ -1,3 +1,15 @@
 # Build artifacts
 build/
 commit_message.txt
+.dart_tool/
+.flutter-plugins-dependencies
+android/.gradle/
+android/.kotlin/
+android/local.properties
+ios/Flutter/ephemeral/
+ios/Runner.xcworkspace/xcshareddata/
+ios/.symlinks
+macos/Flutter/ephemeral/
+macos/Runner.xcworkspace/xcshareddata/
+windows/flutter/ephemeral/
+linux/flutter/ephemeral/

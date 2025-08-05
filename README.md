@@ -1,16 +1,49 @@
-# task_app
+# Plan de Trabajo - Task App
 
-A new Flutter project.
+Este archivo documenta el plan de trabajo y las responsabilidades de cada miembro del equipo.
 
-## Getting Started
+## Roles
 
-This project is a starting point for a Flutter application.
+*   **Leo:** Gestión de estado con GetX, persistencia de datos (GetStorage/Firebase) y APIs simuladas.
+*   **Kat:** Interfaz de usuario (UI), validaciones de formularios y vistas de tareas.
+*   **Andy:** Navegación, flujo de la aplicación, manejo de fechas, notificaciones y CRUD de asignaturas y tareas.
 
-A few resources to get you started if this is your first Flutter project:
+---
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## Estado Actual del Proyecto (5 de Agosto de 2025)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### ✅ Implementado
+
+*   **Flujo de Tareas Funcional (con datos simulados):**
+    *   **Ver la lista de tareas:** La `PantallaHome` muestra las tareas de una asignatura de prueba.
+    *   **Añadir nuevas tareas:** La `PantallaAgregarEditarTarea` permite crear tareas y las añade a la lista.
+    *   **Ver detalles de una tarea:** La `PantallaDetalleTarea` muestra la información de una tarea seleccionada.
+    *   **Marcar tareas como completadas:** Se puede cambiar el estado de una tarea desde la `PantallaHome`.
+    *   **Eliminar tareas:** Se puede borrar una tarea desde la `PantallaDetalleTarea`.
+*   **Gestión de Estado con GetX:**
+    *   Se ha implementado un `ControladorTareas` que maneja toda la lógica de las tareas (añadir, borrar, etc.).
+    *   Las vistas reaccionan automáticamente a los cambios en los datos gracias a GetX (`Obx`).
+
+### 🎨 Para Kat (Diseño de UI)
+
+*   **Reemplazar Vistas Temporales:**
+    *   `pantalla_home.dart`: Necesita un nuevo diseño para mostrar la lista de tareas y asignaturas.
+    *   `pantalla_agregar_editar_tarea.dart`: Hay que crear un formulario bonito y funcional para añadir/editar tareas.
+    *   `pantalla_detalle_tarea.dart`: Requiere un diseño para mostrar todos los detalles de una tarea.
+*   **Componentes a Crear:**
+    *   Un selector de asignaturas en el formulario de tareas.
+    *   Un selector de fecha (`DatePicker`) en el formulario.
+
+### 💾 Para Leo (Datos y Backend)
+
+*   **Implementar Persistencia con GetStorage:**
+    *   Reemplazar la lógica simulada en `ProveedorTareas` y `ProveedorAsignaturas`.
+    *   Los métodos (`agregarTarea`, `eliminarTarea`, etc.) deben ahora guardar y leer los datos de GetStorage en lugar de usar listas en memoria.
+*   **IDs Reales:**
+    *   La creación de tareas actualmente usa un ID temporal (`DateTime.now()`). Hay que cambiarlo por un sistema de IDs más robusto (ej. un contador o un UUID).
+
+### 🚀 Próximos Pasos (Andy)
+
+*   Implementar el CRUD para las **Asignaturas**.
+*   Conectar el `ControladorAsignaturas` a la UI.
+*   Añadir manejo de fechas reales y notificaciones (si aplica).

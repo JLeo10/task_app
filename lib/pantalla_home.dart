@@ -8,7 +8,9 @@ class PantallaHome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ControladorAsignaturas controlador = Get.put(ControladorAsignaturas());
+    final ControladorAsignaturas controlador = Get.put(
+      ControladorAsignaturas(),
+    );
 
     return Scaffold(
       appBar: AppBar(title: const Text('Mis Asignaturas')),
@@ -33,11 +35,16 @@ class PantallaHome extends StatelessWidget {
                 children: [
                   IconButton(
                     icon: const Icon(Icons.edit),
-                    onPressed: () => _mostrarDialogoGuardarAsignatura(context, controlador, asignatura: asignatura),
+                    onPressed: () => _mostrarDialogoGuardarAsignatura(
+                      context,
+                      controlador,
+                      asignatura: asignatura,
+                    ),
                   ),
                   IconButton(
                     icon: const Icon(Icons.delete),
-                    onPressed: () => controlador.eliminarAsignatura(asignatura.id),
+                    onPressed: () =>
+                        controlador.eliminarAsignatura(asignatura.id),
                   ),
                 ],
               ),
@@ -47,15 +54,21 @@ class PantallaHome extends StatelessWidget {
       }),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _mostrarDialogoGuardarAsignatura(context, controlador),
-        child: const Icon(Icons.add),
         tooltip: 'Añadir Asignatura',
+        child: const Icon(Icons.add),
       ),
     );
   }
 
   // --- Diálogo para Añadir/Editar Asignatura ---
-  void _mostrarDialogoGuardarAsignatura(BuildContext context, ControladorAsignaturas controlador, {Asignatura? asignatura}) {
-    final TextEditingController textController = TextEditingController(text: asignatura?.nombre ?? '');
+  void _mostrarDialogoGuardarAsignatura(
+    BuildContext context,
+    ControladorAsignaturas controlador, {
+    Asignatura? asignatura,
+  }) {
+    final TextEditingController textController = TextEditingController(
+      text: asignatura?.nombre ?? '',
+    );
     final esEdicion = asignatura != null;
 
     Get.defaultDialog(
@@ -69,7 +82,10 @@ class PantallaHome extends StatelessWidget {
         onPressed: () {
           if (textController.text.isNotEmpty) {
             if (esEdicion) {
-              controlador.actualizarAsignatura(asignatura.id, textController.text);
+              controlador.actualizarAsignatura(
+                asignatura.id,
+                textController.text,
+              );
             } else {
               controlador.agregarAsignatura(textController.text);
             }

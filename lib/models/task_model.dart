@@ -1,5 +1,3 @@
-import 'package:task_app/models/subject_model.dart';
-
 // Modelo para las tareas de la aplicación
 class Tarea {
   String id;
@@ -26,7 +24,8 @@ class Tarea {
       'idAsignatura': idAsignatura,
       'titulo': titulo,
       'descripcion': descripcion,
-      'fechaEntrega': fechaEntrega.toIso8601String(), //guardamos la fecha en formato estándar
+      'fechaEntrega': fechaEntrega
+          .toIso8601String(), //guardamos la fecha en formato estándar
       'estaCompletada': estaCompletada,
     };
   }
@@ -38,7 +37,9 @@ class Tarea {
       idAsignatura: json['idAsignatura'],
       titulo: json['titulo'],
       descripcion: json['descripcion'],
-      fechaEntrega: DateTime.parse(json['fechaEntrega']),     //convierte string a datetime
+      fechaEntrega: DateTime.parse(
+        json['fechaEntrega'],
+      ), //convierte string a datetime
       estaCompletada: json['estaCompletada'],
     );
   }

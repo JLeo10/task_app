@@ -11,7 +11,13 @@ class AppRutas {
     GetPage(name: '/login', page: () => const PantallaLogin()),
     GetPage(name: '/home', page: () => const PantallaHome()),
     GetPage(name: '/detalle_tarea', page: () => const PantallaDetalleTarea()),
-    GetPage(name: '/agregar_editar_tarea', page: () => const PantallaAgregarEditarTarea()),
-    GetPage(name: '/tareas_por_asignatura', page: () => PantallaTareasPorAsignatura(asignatura: Get.arguments)),
+    GetPage(
+      name: '/agregar_editar_tarea',
+      page: () => const PantallaAgregarEditarTarea(),
+    ),
+    GetPage(
+      name: '/tareas_por_asignatura',
+      page: () => PantallaTareasPorAsignatura(asignatura: Get.arguments),
+    ),
   ];
 }

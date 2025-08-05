@@ -11,7 +11,9 @@ class PantallaTareasPorAsignatura extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // inyecta controlador de tareas para asignatura
-    final ControladorTareas controlador = Get.put(ControladorTareas(asignatura.id));
+    final ControladorTareas controlador = Get.put(
+      ControladorTareas(asignatura.id),
+    );
 
     return Scaffold(
       appBar: AppBar(title: Text('Tareas de ${asignatura.nombre}')),
@@ -45,9 +47,10 @@ class PantallaTareasPorAsignatura extends StatelessWidget {
         );
       }),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => Get.toNamed('/agregar_editar_tarea', arguments: asignatura.id),
-        child: const Icon(Icons.add),
+        onPressed: () =>
+            Get.toNamed('/agregar_editar_tarea', arguments: asignatura.id),
         tooltip: 'Añadir Tarea',
+        child: const Icon(Icons.add),
       ),
     );
   }

@@ -16,7 +16,6 @@ class ControladorTareas extends GetxController {
 
   final String idAsignatura;
 
-
   var tareas = <Tarea>[].obs;
   var estaCargando = true.obs; //para mostrar una ruedita de carga
 
@@ -36,7 +35,9 @@ class ControladorTareas extends GetxController {
     try {
       estaCargando(true);
       //LEO: tu código para captar tareas
-      var resultado = await _proveedorTareas.obtenerTareasPorAsignatura(idAsignatura);
+      var resultado = await _proveedorTareas.obtenerTareasPorAsignatura(
+        idAsignatura,
+      );
       tareas.assignAll(resultado);
     } finally {
       estaCargando(false);
@@ -61,7 +62,7 @@ class ControladorTareas extends GetxController {
   void marcarComoCompletada(String idTarea) async {
     //LEO: actualizaresto en la base de datos
     await _proveedorTareas.marcarComoCompletada(idTarea);
-    cargarTareas(); // Actualizamos para que el checkbox cambie.
+    cargarTareas(); //actualizamos para que el checkbox cambie
   }
 
   //borra una tarea

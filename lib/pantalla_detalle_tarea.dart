@@ -48,23 +48,20 @@ class PantallaDetalleTarea extends StatelessWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        
+
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              tarea.descripcion,
-              style: const TextStyle(fontSize: 16),
-            ),
+            Text(tarea.descripcion, style: const TextStyle(fontSize: 16)),
             const SizedBox(height: 20),
             Row(
               children: [
                 const Icon(Icons.calendar_today, size: 16),
                 const SizedBox(width: 8),
                 Text(
-              'Fecha de entrega: ${DateFormat('dd/MM/yyyy').format(tarea.fechaEntrega)}',
-              style: const TextStyle(fontSize: 16),
-            ),
+                  'Fecha de entrega: ${DateFormat('dd/MM/yyyy').format(tarea.fechaEntrega)}',
+                  style: const TextStyle(fontSize: 16),
+                ),
               ],
             ),
           ],

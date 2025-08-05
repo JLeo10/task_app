@@ -21,7 +21,10 @@ class ProveedorAsignaturas {
   //agrega nueva asignatura
   Future<Asignatura> agregarAsignatura(String nombre) async {
     await Future.delayed(const Duration(milliseconds: 300));
-    final nuevaAsignatura = Asignatura(id: DateTime.now().toString(), nombre: nombre);
+    final nuevaAsignatura = Asignatura(
+      id: DateTime.now().toString(),
+      nombre: nombre,
+    );
     _asignaturas.add(nuevaAsignatura);
     return nuevaAsignatura;
   }

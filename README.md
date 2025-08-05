@@ -1,12 +1,8 @@
 plan de trabajo - task app
 
-este archivo documenta el plan de trabajo y las responsabilidades de cada miembro del equipo
-
-roles
-
 * leo: gestion de estado con getx, persistencia de datos (getstorage/firebase) y apis simuladas
 * kat: interfaz de usuario (ui), validaciones de formularios y vistas de tareas
-* andy: navegacion, flujo de la aplicacion, manejo de fechas, notificaciones y crud de asignaturas y tareas
+* andy: navegacion, flujo de la aplicacion, manejo de fechas y crud de asignaturas y tareas
 
 estado actual del proyecto (5 de agosto de 2025)
 
@@ -54,7 +50,7 @@ para leo (datos y backend)
   * creacion de tareas y asignaturas usa id temporal (datetime.now)
   * cambiar por sistema de ids mas robusto (ej contador o uuid)
 
-proximos pasos (andy)
+prosimamente (andy)
 
-* revision general del codigo para optimizacion y adherencia a mejores practicas
-* refactorizacion de comentarios para seguir estilo consistente y conciso
+* revision general del codigo
+* verificar cambios y adaptar

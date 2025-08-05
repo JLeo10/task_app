@@ -25,7 +25,9 @@ class ProveedorTareas {
   //obtiene tareas de una asignatura específica
   Future<List<Tarea>> obtenerTareasPorAsignatura(String idAsignatura) async {
     await Future.delayed(const Duration(milliseconds: 300));
-    return _tareas.where((tarea) => tarea.idAsignatura == idAsignatura).toList();
+    return _tareas
+        .where((tarea) => tarea.idAsignatura == idAsignatura)
+        .toList();
   }
 
   //agrega nueva tarea

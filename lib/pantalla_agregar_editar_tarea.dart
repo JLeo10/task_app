@@ -10,10 +10,12 @@ class PantallaAgregarEditarTarea extends StatefulWidget {
   const PantallaAgregarEditarTarea({super.key});
 
   @override
-  State<PantallaAgregarEditarTarea> createState() => _PantallaAgregarEditarTareaState();
+  State<PantallaAgregarEditarTarea> createState() =>
+      _PantallaAgregarEditarTareaState();
 }
 
-class _PantallaAgregarEditarTareaState extends State<PantallaAgregarEditarTarea> {
+class _PantallaAgregarEditarTareaState
+    extends State<PantallaAgregarEditarTarea> {
   final _tituloController = TextEditingController();
   final _descripcionController = TextEditingController();
   final _fechaEntregaController = TextEditingController();
@@ -34,13 +36,17 @@ class _PantallaAgregarEditarTareaState extends State<PantallaAgregarEditarTarea>
       _tituloController.text = tareaParaEditar!.titulo;
       _descripcionController.text = tareaParaEditar!.descripcion;
       _fechaSeleccionada = tareaParaEditar!.fechaEntrega;
-      _fechaEntregaController.text = DateFormat('dd/MM/yyyy').format(_fechaSeleccionada!); //formatear para mostrar
+      _fechaEntregaController.text = DateFormat(
+        'dd/MM/yyyy',
+      ).format(_fechaSeleccionada!); //formatear para mostrar
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final ControladorTareas controlador = Get.put(ControladorTareas(idAsignatura ?? tareaParaEditar?.idAsignatura ?? '1'));
+    final ControladorTareas controlador = Get.put(
+      ControladorTareas(idAsignatura ?? tareaParaEditar?.idAsignatura ?? '1'),
+    );
 
     return Scaffold(
       appBar: AppBar(title: Text(esEdicion ? 'Editar Tarea' : 'Añadir Tarea')),
@@ -77,7 +83,9 @@ class _PantallaAgregarEditarTareaState extends State<PantallaAgregarEditarTarea>
                   if (picked != null && picked != _fechaSeleccionada) {
                     setState(() {
                       _fechaSeleccionada = picked;
-                      _fechaEntregaController.text = DateFormat('dd/MM/yyyy').format(picked);
+                      _fechaEntregaController.text = DateFormat(
+                        'dd/MM/yyyy',
+                      ).format(picked);
                     });
                   }
                 },
@@ -85,8 +93,12 @@ class _PantallaAgregarEditarTareaState extends State<PantallaAgregarEditarTarea>
               const SizedBox(height: 32),
               ElevatedButton(
                 onPressed: () {
-                  if (_tituloController.text.isEmpty || _fechaSeleccionada == null) {
-                    Get.snackbar('Error', 'Agregue el título y seleccione una fecha de entrega.');
+                  if (_tituloController.text.isEmpty ||
+                      _fechaSeleccionada == null) {
+                    Get.snackbar(
+                      'Error',
+                      'Agregue el título y seleccione una fecha de entrega.',
+                    );
                     return;
                   }
 

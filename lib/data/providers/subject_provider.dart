@@ -7,8 +7,7 @@ class ProveedorAsignaturas {
   //ahorita en memoria para simular la base de datos
   // LEO: Reemplazar esta lista con llamadas a GetStorage
   final List<Asignatura> _asignaturas = [
-    Asignatura(id: '1', nombre: 'Matemáticas'),
-    Asignatura(id: '2', nombre: 'Historia'),
+    Asignatura(id: '1', nombre: 'Cocina 2'),
   ];
 
   //obtiene todas las asignaturas

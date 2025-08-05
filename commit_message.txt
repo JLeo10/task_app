@@ -1,3 +1,0 @@
-chore: Ignorar y eliminar el directorio build/ del control de versiones.
-
-Se añadió 'build/' a .gitignore y se eliminó del historial de Git para evitar problemas con archivos grandes.

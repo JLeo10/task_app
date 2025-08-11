@@ -44,9 +44,7 @@ class _PantallaAgregarEditarTareaState
 
   @override
   Widget build(BuildContext context) {
-    final ControladorTareas controlador = Get.put(
-      ControladorTareas(idAsignatura ?? tareaParaEditar?.idAsignatura ?? '1'),
-    );
+    final ControladorTareas controlador = Get.find<ControladorTareas>();
 
     return Scaffold(
       appBar: AppBar(title: Text(esEdicion ? 'Editar Tarea' : 'Añadir Tarea')),
@@ -111,8 +109,8 @@ class _PantallaAgregarEditarTareaState
                     controlador.actualizarTarea(tareaActualizada);
                   } else {
                     final nuevaTarea = Tarea(
-                      id: DateTime.now().toString(),
-                      idAsignatura: idAsignatura!,
+                      id: '', // El ID será generado por el proveedor
+                      idAsignatura: controlador.idAsignatura,
                       titulo: _tituloController.text,
                       descripcion: _descripcionController.text,
                       fechaEntrega: _fechaSeleccionada!,

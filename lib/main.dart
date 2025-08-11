@@ -14,6 +14,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false, //oculta  debug
       initialRoute: '/login', //app empieza en la pantalla de login
       getPages: AppRutas.rutas, //usa rutas definidas
+      theme: ThemeData(primarySwatch: Colors.deepPurple),
     );
   }
 }

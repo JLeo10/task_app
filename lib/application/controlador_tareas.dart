@@ -1,51 +1,84 @@
 import 'package:get/get.dart';
-import 'package:task_app/data/providers/task_provider.dart';
-import 'package:task_app/models/task_model.dart';
+import 'package:task_app/data/services/firebase_service.dart';
+import 'dart:async';
 
-class ControladorTareas extends GetxController {
-  final ProveedorTareas _proveedorTareas = ProveedorTareas();
+import 'package:task_app/models/tarea_model.dart';
 
-  final String idAsignatura;
-
+class TareaController extends GetxController {
+  final FirebaseService _firebaseService = FirebaseService();
   var tareas = <Tarea>[].obs;
   var estaCargando = true.obs;
 
-  ControladorTareas(this.idAsignatura);
+  StreamSubscription<List<Tarea>>? _tareasSubscription;
 
-  @override
-  void onInit() {
-    super.onInit();
-    cargarTareas();
+  //get asignaturas => null;
+
+  // Creamos un método para recibir el ID de la asignatura desde la vista
+  void cargarTareasPorAsignatura(String idAsignatura) {
+    estaCargando(true);
+
+    print('Cargando tareas para la asignatura con ID: $idAsignatura');
+
+    _tareasSubscription?.cancel(); // Cancelamos la suscripción anterior
+    _tareasSubscription = _firebaseService
+        .getTareasStreamPorAsignatura(idAsignatura)
+        .listen(
+          (data) {
+            tareas.assignAll(data);
+            estaCargando(false);
+          },
+          onError: (error) {
+            estaCargando(false);
+            Get.snackbar('Error', 'No se pudieron cargar las tareas: $error');
+          },
+        );
   }
 
-  void cargarTareas() async {
+  @override
+  void onClose() {
+    _tareasSubscription?.cancel();
+    super.onClose();
+  }
+
+  // --- Métodos de escritura (CRUD) ---
+
+  void agregarTarea(Tarea nuevaTarea) async {
     try {
-      estaCargando(true);
-      var resultado = await _proveedorTareas.obtenerTareasPorAsignatura(idAsignatura);
-      tareas.assignAll(resultado);
-    } finally {
-      estaCargando(false);
+      await _firebaseService.agregarTarea(nuevaTarea);
+      Get.snackbar('Éxito', 'Tarea agregada correctamente.');
+    } catch (e) {
+      Get.snackbar('Error', 'No se pudo agregar la tarea.');
     }
   }
 
-  void agregarTarea(Tarea nuevaTarea) async {
-    final tareaConAsignatura = nuevaTarea.copyWith(idAsignatura: idAsignatura);
-    await _proveedorTareas.agregarTarea(tareaConAsignatura);
-    cargarTareas();
-  }
-
   void actualizarTarea(Tarea tareaActualizada) async {
-    await _proveedorTareas.actualizarTarea(tareaActualizada);
-    cargarTareas();
+    try {
+      await _firebaseService.actualizarTarea(tareaActualizada);
+      Get.snackbar('Éxito', 'Tarea actualizada correctamente.');
+    } catch (e) {
+      Get.snackbar('Error', 'No se pudo actualizar la tarea.');
+    }
   }
 
-  void marcarComoCompletada(String idTarea) async {
-    await _proveedorTareas.marcarComoCompletada(idTarea);
-    cargarTareas();
+  void eliminarTarea(String id) async {
+    try {
+      await _firebaseService.eliminarTarea(id);
+      Get.snackbar('Éxito', 'Tarea eliminada correctamente.');
+    } catch (e) {
+      Get.snackbar('Error', 'No se pudo eliminar la tarea.');
+    }
   }
 
-  void eliminarTarea(String idTarea) async {
-    await _proveedorTareas.eliminarTarea(idTarea);
-    cargarTareas();
+  void marcarComoCompletada(String tareaId, bool? valor) async {
+    try {
+      final tarea = tareas.firstWhereOrNull((t) => t.id == tareaId);
+      if (tarea != null) {
+        final tareaActualizada = tarea.copyWith(estaCompletada: valor ?? false);
+        await _firebaseService.actualizarTarea(tareaActualizada);
+        Get.snackbar('Éxito', 'Estado de la tarea actualizado.');
+      }
+    } catch (e) {
+      Get.snackbar('Error', 'No se pudo actualizar el estado de la tarea.');
+    }
   }
 }

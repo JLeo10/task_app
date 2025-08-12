@@ -5,8 +5,11 @@ class Asignatura {
 
   Asignatura({required this.id, required this.nombre});
 
+  Asignatura copyWith({String? id, String? nombre}) {
+    return Asignatura(id: id ?? this.id, nombre: nombre ?? this.nombre);
+  }
+
   //metodo convertir un objeto Tarea a un mapa JSON
-  //LEO lo ocuapara para guardar los datos en GetStorage
   Map<String, dynamic> toJson() {
     return {'id': id, 'nombre': nombre};
   }

@@ -1,4 +1,4 @@
-import 'package:task_app/models/subject_model.dart';
+import 'package:task_app/models/asignaturas_model.dart';
 
 // Este provider maneja toda la lógica de datos para las asignaturas
 // Actualmente usa una lista en memoria, pero está preparado para que

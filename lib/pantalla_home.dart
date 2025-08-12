@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:task_app/application/controlador_asignaturas.dart';
-import 'package:task_app/models/subject_model.dart';
+import 'package:task_app/models/asignaturas_model.dart';
 
 class PantallaHome extends StatelessWidget {
   const PantallaHome({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final ControladorAsignaturas controlador = Get.put(
-      ControladorAsignaturas(),
-    );
+    final AsignaturaController controlador = Get.put(AsignaturaController());
 
     return Scaffold(
       appBar: AppBar(title: const Text('Mis Asignaturas')),
@@ -19,34 +17,47 @@ class PantallaHome extends StatelessWidget {
           return const Center(child: CircularProgressIndicator());
         }
         if (controlador.asignaturas.isEmpty) {
-          return const Center(child: Text('No hay asignaturas. ¡Agregaaa!'));
+          return const Center(child: Text('No hay asignaturas. ¡Agrega una!'));
         }
         return ListView.builder(
           itemCount: controlador.asignaturas.length,
           itemBuilder: (context, index) {
             final asignatura = controlador.asignaturas[index];
-            return ListTile(
-              title: Text(asignatura.nombre),
-              onTap: () {
-                Get.toNamed('/tareas_por_asignatura', arguments: asignatura);
-              },
-              trailing: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.edit),
-                    onPressed: () => _mostrarDialogoGuardarAsignatura(
-                      context,
-                      controlador,
-                      asignatura: asignatura,
+            return Card(
+              margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              child: ListTile(
+                title: Text(asignatura.nombre),
+                onTap: () {
+                  if (asignatura.id.isNotEmpty) {
+                    Get.toNamed(
+                      '/tareas_por_asignatura',
+                      arguments: asignatura,
+                    );
+                  } else {
+                    Get.snackbar(
+                      'Error',
+                      'La asignatura no tiene un ID válido.',
+                    );
+                  }
+                },
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.edit),
+                      onPressed: () => _mostrarDialogoGuardarAsignatura(
+                        context,
+                        controlador,
+                        asignatura: asignatura,
+                      ),
                     ),
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.delete),
-                    onPressed: () =>
-                        controlador.eliminarAsignatura(asignatura.id),
-                  ),
-                ],
+                    IconButton(
+                      icon: const Icon(Icons.delete),
+                      onPressed: () =>
+                          controlador.eliminarAsignatura(asignatura.id),
+                    ),
+                  ],
+                ),
               ),
             );
           },
@@ -60,10 +71,9 @@ class PantallaHome extends StatelessWidget {
     );
   }
 
-  // --- Diálogo para Añadir/Editar Asignatura ---
   void _mostrarDialogoGuardarAsignatura(
     BuildContext context,
-    ControladorAsignaturas controlador, {
+    AsignaturaController controlador, {
     Asignatura? asignatura,
   }) {
     final TextEditingController textController = TextEditingController(
@@ -83,13 +93,13 @@ class PantallaHome extends StatelessWidget {
           if (textController.text.isNotEmpty) {
             if (esEdicion) {
               controlador.actualizarAsignatura(
-                asignatura.id,
+                asignatura!.id,
                 textController.text,
               );
             } else {
               controlador.agregarAsignatura(textController.text);
             }
-            Get.back(); // cierra dialogo
+            Get.back();
           }
         },
         child: const Text('Guardar'),

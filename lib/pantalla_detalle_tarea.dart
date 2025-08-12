@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:task_app/application/controlador_tareas.dart';
-import 'package:task_app/models/task_model.dart';
+import 'package:task_app/models/tarea_model.dart';
 
 // KAT: Esta es la pantalla para ver los detalles de una tarea
 // Aqui mostrar toda la info de la Tarea toa  chula
@@ -14,7 +14,7 @@ class PantallaDetalleTarea extends StatelessWidget {
     final Tarea tarea = Get.arguments;
 
     //buscamos el controlador que ya está por ahí
-    final ControladorTareas controlador = Get.find<ControladorTareas>();
+    final TareaController controlador = Get.find<TareaController>();
 
     return Scaffold(
       appBar: AppBar(

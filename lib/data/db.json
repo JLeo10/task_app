@@ -1,0 +1,10 @@
+{
+  "asignaturas": [
+    { "id": "1", "nombre": "Matemáticas" },
+    { "id": "2", "nombre": "Programación I" }
+  ],
+  "tasks": [
+    { "id": "101", "idAsignatura": "1", "titulo": "Resolver ecuaciones", "descripcion": "Tarea 1 del capítulo 5", "fechaEntrega": "2025-08-10T10:00:00Z", "estaCompletada": false },
+    { "id": "102", "idAsignatura": "2", "titulo": "Proyecto de Flutter", "descripcion": "Entregar la app de tareas", "fechaEntrega": "2025-08-15T23:59:00Z", "estaCompletada": false }
+  ]
+}

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart'; // necesario para formatear la fecha
+import 'package:intl/intl.dart';
+import 'package:task_app/application/controlador_asignaturas.dart';
 import 'package:task_app/application/controlador_tareas.dart';
-import 'package:task_app/models/task_model.dart';
-
-//KAT: formulario para añadir y editar tareas
+import 'package:task_app/models/asignaturas_model.dart';
+import 'package:task_app/models/tarea_model.dart';
 
 class PantallaAgregarEditarTarea extends StatefulWidget {
   const PantallaAgregarEditarTarea({super.key});
@@ -21,33 +21,47 @@ class _PantallaAgregarEditarTareaState
   final _fechaEntregaController = TextEditingController();
   DateTime? _fechaSeleccionada;
 
-  String? idAsignatura;
-  Tarea? tareaParaEditar;
+  Asignatura? _asignatura;
+  Tarea? _tareaParaEditar;
   bool esEdicion = false;
 
   @override
   void initState() {
     super.initState();
-    idAsignatura = Get.arguments is String ? Get.arguments : null;
-    tareaParaEditar = Get.arguments is Tarea ? Get.arguments : null;
-    esEdicion = tareaParaEditar != null;
+    final args = Get.arguments;
 
-    if (esEdicion) {
-      _tituloController.text = tareaParaEditar!.titulo;
-      _descripcionController.text = tareaParaEditar!.descripcion;
-      _fechaSeleccionada = tareaParaEditar!.fechaEntrega;
-      _fechaEntregaController.text = DateFormat(
-        'dd/MM/yyyy',
-      ).format(_fechaSeleccionada!); //formatear para mostrar
+    if (args is Asignatura) {
+      _asignatura = args;
+      esEdicion = false;
+    } else if (args is Tarea) {
+      _tareaParaEditar = args;
+      esEdicion = true;
+      _asignatura = Get.find<AsignaturaController>().asignaturas
+          .firstWhereOrNull((a) => a.id == _tareaParaEditar?.idAsignatura);
+
+      _tituloController.text = _tareaParaEditar?.titulo ?? '';
+      _descripcionController.text = _tareaParaEditar?.descripcion ?? '';
+      _fechaSeleccionada = _tareaParaEditar?.fechaEntrega;
+      if (_fechaSeleccionada != null) {
+        _fechaEntregaController.text = DateFormat(
+          'dd/MM/yyyy',
+        ).format(_fechaSeleccionada!);
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final ControladorTareas controlador = Get.find<ControladorTareas>();
+    final TareaController controlador = Get.find<TareaController>();
 
     return Scaffold(
-      appBar: AppBar(title: Text(esEdicion ? 'Editar Tarea' : 'Añadir Tarea')),
+      appBar: AppBar(
+        title: Text(
+          esEdicion
+              ? 'Editar Tarea'
+              : 'Añadir Tarea para ${_asignatura?.nombre ?? 'Desconocida'}',
+        ),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
@@ -69,9 +83,8 @@ class _PantallaAgregarEditarTareaState
                   labelText: 'Fecha de Entrega',
                   suffixIcon: Icon(Icons.calendar_today),
                 ),
-                readOnly: true, //para que no se pueda escribir directamente
+                readOnly: true,
                 onTap: () async {
-                  //abre selector de fecha
                   final DateTime? picked = await showDatePicker(
                     context: context,
                     initialDate: _fechaSeleccionada ?? DateTime.now(),
@@ -91,26 +104,39 @@ class _PantallaAgregarEditarTareaState
               const SizedBox(height: 32),
               ElevatedButton(
                 onPressed: () {
-                  if (_tituloController.text.isEmpty ||
-                      _fechaSeleccionada == null) {
+                  if (_tituloController.text.isEmpty) {
                     Get.snackbar(
                       'Error',
-                      'Agregue el título y seleccione una fecha de entrega.',
+                      'El título de la tarea no puede estar vacío.',
+                    );
+                    return;
+                  }
+                  if (_fechaSeleccionada == null) {
+                    Get.snackbar(
+                      'Error',
+                      'Debe seleccionar una fecha de entrega.',
+                    );
+                    return;
+                  }
+                  if (_asignatura == null) {
+                    Get.snackbar(
+                      'Error',
+                      'La asignatura no se pudo cargar. Intente de nuevo.',
                     );
                     return;
                   }
 
                   if (esEdicion) {
-                    final tareaActualizada = tareaParaEditar!.copyWith(
+                    final tareaActualizada = _tareaParaEditar!.copyWith(
                       titulo: _tituloController.text,
                       descripcion: _descripcionController.text,
-                      fechaEntrega: _fechaSeleccionada!,
+                      fechaEntrega: _fechaSeleccionada,
                     );
                     controlador.actualizarTarea(tareaActualizada);
                   } else {
                     final nuevaTarea = Tarea(
-                      id: '', // El ID será generado por el proveedor
-                      idAsignatura: controlador.idAsignatura,
+                      id: '',
+                      idAsignatura: _asignatura!.id,
                       titulo: _tituloController.text,
                       descripcion: _descripcionController.text,
                       fechaEntrega: _fechaSeleccionada!,

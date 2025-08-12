@@ -1,4 +1,4 @@
-import 'package:task_app/models/task_model.dart';
+import 'package:task_app/models/tarea_model.dart';
 
 // Este provider maneja toda la lógica de datos para las tareas
 // LEO: conectar estos métodos con GetStorage

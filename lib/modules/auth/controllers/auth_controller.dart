@@ -20,7 +20,7 @@ class AuthController extends GetxController {
     super.onInit();
     _auth.authStateChanges().listen((User? user) {
       if (user == null) {
-        Get.offAllNamed('/auth');
+        Get.offAllNamed('/login');
       } else {
         Get.offAllNamed('/home');
       }

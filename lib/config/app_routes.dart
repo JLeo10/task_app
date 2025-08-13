@@ -15,8 +15,8 @@ class AppRutas {
     GetPage(name: '/register', page: () => const RegisterPage()),
     GetPage(name: '/home', page: () => const PantallaHome()),
     GetPage(
-      name: '/tareas_por_asignatura',
-      page: () => const PantallaTareasPorAsignatura(),
+      name: '/tareas_por_asignatura/:asignaturaId',
+      page: () => PantallaTareasPorAsignatura(asignaturaId: Get.parameters['asignaturaId']!),
     ),
     // TODO: Añadir las siguientes rutas cuando las pantallas estén creadas
     

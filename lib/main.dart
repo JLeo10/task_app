@@ -4,12 +4,16 @@ import 'package:get/get.dart';
 import 'package:task_app/config/app_routes.dart';
 import 'package:task_app/config/theme.dart'; // importamos nuestro tema personalizado
 import 'package:task_app/firebase_options.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // inicializar Firebase en nuestra aplicación
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  // Inicializar datos de localización para intl
+  await initializeDateFormatting('es_ES', null);
 
   runApp(const MyApp());
 }

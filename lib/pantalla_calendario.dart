@@ -9,7 +9,7 @@ import 'package:intl/intl.dart';
 class PantallaCalendario extends StatefulWidget {
   final String asignaturaId;
 
-  const PantallaCalendario({Key? key, required this.asignaturaId}) : super(key: key);
+  const PantallaCalendario({super.key, required this.asignaturaId});
 
   @override
   State<PantallaCalendario> createState() => _PantallaCalendarioState();

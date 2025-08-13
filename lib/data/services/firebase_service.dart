@@ -62,6 +62,23 @@ class FirebaseService {
         .delete();
   }
 
+  Future<Asignatura?> getAsignaturaById(String asignaturaId) async {
+    if (_currentUserId == null) {
+      throw Exception('Usuario no autenticado.');
+    }
+    final doc = await _firestore
+        .collection('users')
+        .doc(_currentUserId)
+        .collection('asignaturas')
+        .doc(asignaturaId)
+        .get();
+    if (doc.exists) {
+      return Asignatura.fromJson(doc.id, doc.data()!);
+    } else {
+      return null;
+    }
+  }
+
   // --- MÉTODOS DE TAREAS ---
   Stream<List<Tarea>> getTareasStreamPorAsignatura(String idAsignatura) {
     if (_currentUserId == null) {

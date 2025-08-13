@@ -8,7 +8,7 @@ import 'package:intl/intl.dart';
 class PantallaVistaSemanal extends StatelessWidget {
   final String asignaturaId; // Necesitamos el ID de la asignatura para filtrar tareas
 
-  PantallaVistaSemanal({Key? key, required this.asignaturaId}) : super(key: key);
+  const PantallaVistaSemanal({super.key, required this.asignaturaId});
 
   @override
   Widget build(BuildContext context) {
@@ -83,7 +83,7 @@ class PantallaVistaSemanal extends StatelessWidget {
                           Text(DateFormat('HH:mm').format(tarea.fechaEntrega)),
                         ],
                       ),
-                    )).toList(),
+                    )),
                   ],
                 ),
               ),

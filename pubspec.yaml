@@ -94,3 +94,9 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_local_notifications: ^16.3.2
+  timezone: ^0.9.2
+  flutter_native_timezone: ^2.0.0

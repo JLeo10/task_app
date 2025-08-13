@@ -93,7 +93,7 @@ class PantallaHome extends StatelessWidget {
           if (textController.text.isNotEmpty) {
             if (esEdicion) {
               controlador.actualizarAsignatura(
-                asignatura!.id,
+                asignatura.id,
                 textController.text,
               );
             } else {

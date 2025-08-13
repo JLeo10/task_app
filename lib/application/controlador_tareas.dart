@@ -1,27 +1,29 @@
+// lib/application/controlador_tareas.dart
 import 'package:get/get.dart';
 import 'package:task_app/data/services/firebase_service.dart';
 import 'dart:async';
-
 import 'package:task_app/models/tarea_model.dart';
 
 class TareaController extends GetxController {
+  // Ahora el controlador requiere el id de la asignatura para inicializarse
+  final String asignaturaId;
+  TareaController({required this.asignaturaId});
+
   final FirebaseService _firebaseService = FirebaseService();
   var tareas = <Tarea>[].obs;
   var estaCargando = true.obs;
 
   StreamSubscription<List<Tarea>>? _tareasSubscription;
 
-  //get asignaturas => null;
-
-  // Creamos un método para recibir el ID de la asignatura desde la vista
-  void cargarTareasPorAsignatura(String idAsignatura) {
+  @override
+  void onInit() {
+    super.onInit();
     estaCargando(true);
+    print('Cargando tareas para la asignatura con ID: $asignaturaId');
 
-    print('Cargando tareas para la asignatura con ID: $idAsignatura');
-
-    _tareasSubscription?.cancel(); // Cancelamos la suscripción anterior
+    _tareasSubscription?.cancel();
     _tareasSubscription = _firebaseService
-        .getTareasStreamPorAsignatura(idAsignatura)
+        .getTareasStreamPorAsignatura(asignaturaId)
         .listen(
           (data) {
             tareas.assignAll(data);
@@ -44,6 +46,7 @@ class TareaController extends GetxController {
 
   void agregarTarea(Tarea nuevaTarea) async {
     try {
+      // El servicio ya sabe el id de la asignatura por la tarea
       await _firebaseService.agregarTarea(nuevaTarea);
       Get.snackbar('Éxito', 'Tarea agregada correctamente.');
     } catch (e) {
@@ -53,6 +56,7 @@ class TareaController extends GetxController {
 
   void actualizarTarea(Tarea tareaActualizada) async {
     try {
+      // El servicio ya sabe el id de la asignatura por la tarea
       await _firebaseService.actualizarTarea(tareaActualizada);
       Get.snackbar('Éxito', 'Tarea actualizada correctamente.');
     } catch (e) {
@@ -60,9 +64,10 @@ class TareaController extends GetxController {
     }
   }
 
-  void eliminarTarea(String id) async {
+  void eliminarTarea(String idTarea) async {
     try {
-      await _firebaseService.eliminarTarea(id);
+      // Usamos el idAsignatura que ya tiene el controlador
+      await _firebaseService.eliminarTarea(asignaturaId, idTarea);
       Get.snackbar('Éxito', 'Tarea eliminada correctamente.');
     } catch (e) {
       Get.snackbar('Error', 'No se pudo eliminar la tarea.');

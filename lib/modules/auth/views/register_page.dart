@@ -1,67 +1,58 @@
+// lib/modules/auth/views/register_page.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:task_app/modules/auth/controllers/auth_controller.dart';
-import 'package:task_app/shared/widgets/custom_textfield.dart';
-import 'package:task_app/shared/widgets/primary_button.dart';
+import 'package:task_app/modules/auth/controllers/register_controller.dart';
 
 class RegisterPage extends StatelessWidget {
   const RegisterPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final AuthController c = Get.put(AuthController());
-    final formKey = GlobalKey<FormState>();
+    // Vinculamos la vista con el controlador
+    final RegisterController controller = Get.put(RegisterController());
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Registro')),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: formKey,
-          child: ListView(
+      appBar: AppBar(title: const Text('Registro de Usuario')),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              CustomTextField(
-                controller: c.nombreController,
-                label: 'Nombre',
-                validator: c.validarNombre,
+              TextFormField(
+                controller: controller.nameController,
+                decoration: const InputDecoration(labelText: 'Nombre'),
               ),
-              const SizedBox(height: 12),
-              CustomTextField(
-                controller: c.emailController,
-                label: 'Email',
+              const SizedBox(height: 16),
+              TextFormField(
+                controller: controller.emailController,
+                decoration: const InputDecoration(
+                  labelText: 'Correo Electrónico',
+                ),
                 keyboardType: TextInputType.emailAddress,
-                validator: c.validarEmail,
               ),
-              const SizedBox(height: 12),
-              CustomTextField(
-                controller: c.passwordController,
-                label: 'Contraseña',
+              const SizedBox(height: 16),
+              TextFormField(
+                controller: controller.passwordController,
+                decoration: const InputDecoration(labelText: 'Contraseña'),
                 obscureText: true,
-                validator: c.validarPassword,
               ),
-              const SizedBox(height: 12),
-              CustomTextField(
-                controller: c.confirmarController,
-                label: 'Confirmar contraseña',
-                obscureText: true,
-                validator: c.validarConfirmar,
+              const SizedBox(height: 32),
+              Obx(
+                () => controller.isLoading.value
+                    ? const Center(child: CircularProgressIndicator())
+                    : ElevatedButton(
+                        onPressed: controller.register,
+                        child: const Text('Registrar'),
+                      ),
               ),
-              const SizedBox(height: 20),
-              Obx(() => PrimaryButton(
-                    text: c.isLoading.value ? 'Registrando...' : 'Registrarse',
-                    onPressed: c.isLoading.value
-                        ? null
-                        : () {
-                            if (formKey.currentState?.validate() ?? false) {
-                              c.register();
-                            }
-                          },
-                  )),
-              const SizedBox(height: 12),
+              const SizedBox(height: 16),
               TextButton(
-                onPressed: () => Get.back(),
-                child: const Text('¿Ya tienes una cuenta? Inicia sesión'),
-              )
+                onPressed: () {
+                  Get.back();
+                },
+                child: const Text('¿Ya tienes una cuenta? Inicia sesión aquí.'),
+              ),
             ],
           ),
         ),

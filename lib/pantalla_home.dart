@@ -1,7 +1,9 @@
+// lib/modules/asignaturas/views/pantalla_home.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:task_app/application/controlador_asignaturas.dart';
 import 'package:task_app/models/asignaturas_model.dart';
+import 'package:task_app/modules/auth/controllers/auth_controller.dart';
 
 class PantallaHome extends StatelessWidget {
   const PantallaHome({super.key});
@@ -11,7 +13,20 @@ class PantallaHome extends StatelessWidget {
     final AsignaturaController controlador = Get.put(AsignaturaController());
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Mis Asignaturas')),
+      appBar: AppBar(
+        title: const Text('Mis Asignaturas'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            tooltip: 'Cerrar sesión',
+            onPressed: () {
+              // CORRECCIÓN: Usamos Get.find() para obtener la instancia existente
+              final AuthController authController = Get.find<AuthController>();
+              authController.signOut();
+            },
+          ),
+        ],
+      ),
       body: Obx(() {
         if (controlador.estaCargando.value) {
           return const Center(child: CircularProgressIndicator());

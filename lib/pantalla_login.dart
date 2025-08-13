@@ -1,55 +1,54 @@
+// lib/modules/auth/views/pantalla_login.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:task_app/modules/auth/controllers/auth_controller.dart';
-import 'package:task_app/shared/widgets/custom_textfield.dart';
-import 'package:task_app/shared/widgets/primary_button.dart';
+import 'package:task_app/modules/auth/controllers/login_controller.dart';
 
+// esta es la pantalla para iniciar sesion
 class PantallaLogin extends StatelessWidget {
   const PantallaLogin({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final AuthController c = Get.put(AuthController());
-    final formKey = GlobalKey<FormState>();
+    // Vinculamos la vista con el controlador
+    final LoginController controller = Get.put(LoginController());
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Iniciar sesión')),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: formKey,
+      appBar: AppBar(title: const Text('Inicio de Sesión')),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              CustomTextField(
-                controller: c.emailController,
-                label: 'Email',
+              TextFormField(
+                controller: controller.emailController,
+                decoration: const InputDecoration(
+                  labelText: 'Correo Electrónico',
+                ),
                 keyboardType: TextInputType.emailAddress,
-                validator: c.validarEmail,
               ),
-              const SizedBox(height: 12),
-              CustomTextField(
-                controller: c.passwordController,
-                label: 'Contraseña',
+              const SizedBox(height: 16),
+              TextFormField(
+                controller: controller.passwordController,
+                decoration: const InputDecoration(labelText: 'Contraseña'),
                 obscureText: true,
-                validator: (v) => v == null || v.isEmpty ? 'Ingrese la contraseña' : null,
               ),
-              const SizedBox(height: 20),
-              Obx(() => PrimaryButton(
-                    text: c.isLoading.value ? 'Iniciando...' : 'Iniciar sesión',
-                    onPressed: c.isLoading.value
-                        ? null
-                        : () {
-                            if (formKey.currentState?.validate() ?? false) {
-                              c.login();
-                            }
-                          },
-                  )),
-              const SizedBox(height: 12),
+              const SizedBox(height: 32),
+              Obx(
+                () => controller.isLoading.value
+                    ? const Center(child: CircularProgressIndicator())
+                    : ElevatedButton(
+                        onPressed: controller.login,
+                        child: const Text('Iniciar Sesión'),
+                      ),
+              ),
+              const SizedBox(height: 16),
               TextButton(
-                onPressed: () => Get.toNamed('/register'),
-                child: const Text('¿No tienes cuenta? Regístrate'),
-              )
+                onPressed: () {
+                  Get.toNamed('/register');
+                },
+                child: const Text('¿No tienes una cuenta? Regístrate aquí.'),
+              ),
             ],
           ),
         ),

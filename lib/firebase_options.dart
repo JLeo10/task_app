@@ -59,4 +59,5 @@ class DefaultFirebaseOptions {
     projectId: 'task01-76cbb',
     storageBucket: 'task01-76cbb.firebasestorage.app',
   );
+
 }

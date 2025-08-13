@@ -19,8 +19,3 @@ Integrantes:
  Vista de calendario o lista semanal (Implementado)
  Filtros y cambios de estado reactivo con GetX (Implementado)
  Persistencia local inicial, migrable a Firebase (Implementado con Firebase Firestore)
-
-## Extras
-- Se realizó una limpieza de código, eliminando archivos y directorios no utilizados.
-- Se corrigieron advertencias de análisis de código para mejorar la calidad del proyecto.
-- Se eliminó el botón de cerrar sesión debido a problemas de funcionalidad.

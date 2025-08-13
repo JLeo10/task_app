@@ -10,7 +10,8 @@ class AuthController extends GetxController {
   final isLoading = false.obs;
 
   String? validarNombre(String? value) {
-    if (value == null || value.trim().isEmpty) return 'El nombre es obligatorio';
+    if (value == null || value.trim().isEmpty)
+      return 'El nombre es obligatorio';
     if (value.trim().length < 3) return 'Mínimo 3 caracteres';
     return null;
   }
@@ -49,7 +50,8 @@ class AuthController extends GetxController {
     isLoading(true);
     await Future.delayed(const Duration(milliseconds: 600));
     isLoading(false);
-    if (emailController.text.contains('@') && passwordController.text.length >= 6) {
+    if (emailController.text.contains('@') &&
+        passwordController.text.length >= 6) {
       Get.offAllNamed('/home');
     } else {
       Get.snackbar('Error', 'Credenciales inválidas');

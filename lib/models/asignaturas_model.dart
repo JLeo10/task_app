@@ -14,8 +14,10 @@ class Asignatura {
     return {'id': id, 'nombre': nombre};
   }
 
-  //crea asignatura desde json para leo
-  factory Asignatura.fromJson(Map<String, dynamic> json) {
-    return Asignatura(id: json['id'], nombre: json['nombre']);
+  factory Asignatura.fromJson(String id, Map<String, dynamic> json) {
+    return Asignatura(
+      id: id, // Usamos el ID que se pasa como argumento
+      nombre: json['nombre'],
+    );
   }
 }

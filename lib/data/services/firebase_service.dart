@@ -1,74 +1,124 @@
+// lib/data/services/firebase_service.dart
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:task_app/models/asignaturas_model.dart';
 import 'package:task_app/models/tarea_model.dart';
 
 class FirebaseService {
-  final FirebaseFirestore _db = FirebaseFirestore.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  // --- Métodos para Asignaturas ---
+  String? get _currentUserId => _auth.currentUser?.uid;
+
+  // --- MÉTODOS DE ASIGNATURAS ---
   Stream<List<Asignatura>> getAsignaturasStream() {
-    return _db.collection('asignaturas').snapshots().map((snapshot) {
-      return snapshot.docs
-          .map((doc) => Asignatura.fromJson(doc.data()))
-          .toList();
-    });
-  }
-
-  // --- Métodos para Tareas ---
-  Stream<List<Tarea>> getTareasStream() {
-    return _db.collection('tareas').snapshots().map((snapshot) {
-      return snapshot.docs.map((doc) => Tarea.fromJson(doc.data())).toList();
-    });
-  }
-
-  Stream<List<Tarea>> getTareasStreamPorAsignatura(String idAsignatura) {
-    return _db
-        .collection('tareas')
-        .where('idAsignatura', isEqualTo: idAsignatura)
+    if (_currentUserId == null) {
+      throw Exception('Usuario no autenticado.');
+    }
+    return _firestore
+        .collection('users')
+        .doc(_currentUserId)
+        .collection('asignaturas')
         .snapshots()
-        .map((snapshot) {
-          return snapshot.docs
-              .map((doc) => Tarea.fromJson(doc.data()))
-              .toList();
-        });
+        .map(
+          (snapshot) => snapshot.docs
+              .map((doc) => Asignatura.fromJson(doc.id, doc.data()))
+              .toList(),
+        );
   }
 
-  //Metodos para CRUD de tareas
-  Future<void> agregarTarea(Tarea tarea) {
-    // 1. Crea una referencia a un nuevo documento para obtener su ID
-    final docRef = _db.collection('tareas').doc();
-    // 2. Crea una nueva tarea con el ID que acaba de generar
-    final tareaConId = tarea.copyWith(id: docRef.id);
-    // 3. Guarda la tarea completa en el documento con el método set
-    return docRef.set(tareaConId.toJson());
-  }
-
-  Future<void> actualizarTarea(Tarea tarea) {
-    return _db.collection('tareas').doc(tarea.id).update(tarea.toJson());
-  }
-
-  Future<void> eliminarTarea(String id) {
-    return _db.collection('tareas').doc(id).delete();
-  }
-
-  //Metodos para CRUD de asignaturas
   Future<void> agregarAsignatura(Asignatura asignatura) async {
-    // 1. Crea una referencia a un nuevo documento para obtener su ID
-    final docRef = _db.collection('asignaturas').doc();
-    // 2. Crea una nueva asignatura con el ID que acaba de generar
-    final asignaturaConId = asignatura.copyWith(id: docRef.id);
-    // 3. Guarda la asignatura completa en el documento con el método set
-    return docRef.set(asignaturaConId.toJson());
+    if (_currentUserId == null) {
+      throw Exception('Usuario no autenticado.');
+    }
+    await _firestore
+        .collection('users')
+        .doc(_currentUserId)
+        .collection('asignaturas')
+        .add(asignatura.toJson());
   }
 
-  Future<void> actualizarAsignatura(Asignatura asignatura) {
-    return _db
+  Future<void> actualizarAsignatura(Asignatura asignatura) async {
+    if (_currentUserId == null) {
+      throw Exception('Usuario no autenticado.');
+    }
+    await _firestore
+        .collection('users')
+        .doc(_currentUserId)
         .collection('asignaturas')
         .doc(asignatura.id)
         .update(asignatura.toJson());
   }
 
-  Future<void> eliminarAsignatura(String id) {
-    return _db.collection('asignaturas').doc(id).delete();
+  Future<void> eliminarAsignatura(String id) async {
+    if (_currentUserId == null) {
+      throw Exception('Usuario no autenticado.');
+    }
+    await _firestore
+        .collection('users')
+        .doc(_currentUserId)
+        .collection('asignaturas')
+        .doc(id)
+        .delete();
+  }
+
+  // --- MÉTODOS DE TAREAS ---
+  Stream<List<Tarea>> getTareasStreamPorAsignatura(String idAsignatura) {
+    if (_currentUserId == null) {
+      throw Exception('Usuario no autenticado.');
+    }
+    return _firestore
+        .collection('users')
+        .doc(_currentUserId)
+        .collection('asignaturas')
+        .doc(idAsignatura)
+        .collection('tareas')
+        .snapshots()
+        .map(
+          (snapshot) => snapshot.docs
+              .map((doc) => Tarea.fromJson(doc.id, doc.data()))
+              .toList(),
+        );
+  }
+
+  Future<void> agregarTarea(Tarea nuevaTarea) async {
+    if (_currentUserId == null) {
+      throw Exception('Usuario no autenticado.');
+    }
+    await _firestore
+        .collection('users')
+        .doc(_currentUserId)
+        .collection('asignaturas')
+        .doc(nuevaTarea.idAsignatura)
+        .collection('tareas')
+        .add(nuevaTarea.toJson());
+  }
+
+  Future<void> actualizarTarea(Tarea tareaActualizada) async {
+    if (_currentUserId == null) {
+      throw Exception('Usuario no autenticado.');
+    }
+    await _firestore
+        .collection('users')
+        .doc(_currentUserId)
+        .collection('asignaturas')
+        .doc(tareaActualizada.idAsignatura)
+        .collection('tareas')
+        .doc(tareaActualizada.id)
+        .update(tareaActualizada.toJson());
+  }
+
+  Future<void> eliminarTarea(String idAsignatura, String idTarea) async {
+    if (_currentUserId == null) {
+      throw Exception('Usuario no autenticado.');
+    }
+    await _firestore
+        .collection('users')
+        .doc(_currentUserId)
+        .collection('asignaturas')
+        .doc(idAsignatura)
+        .collection('tareas')
+        .doc(idTarea)
+        .delete();
   }
 }

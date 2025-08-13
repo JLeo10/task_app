@@ -30,10 +30,9 @@ class Tarea {
     };
   }
 
-  //metodo crear un objeto Tarea desde un mapa JSON
-  factory Tarea.fromJson(Map<String, dynamic> json) {
+  factory Tarea.fromJson(String id, Map<String, dynamic> json) {
     return Tarea(
-      id: json['id'],
+      id: id, // Ahora usamos el ID que se pasa como argumento
       idAsignatura: json['idAsignatura'],
       titulo: json['titulo'],
       descripcion: json['descripcion'],

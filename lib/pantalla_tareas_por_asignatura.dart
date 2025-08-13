@@ -1,3 +1,4 @@
+// lib/modules/tasks/views/pantalla_tareas_por_asignatura.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:task_app/application/controlador_tareas.dart';
@@ -19,8 +20,10 @@ class PantallaTareasPorAsignatura extends StatelessWidget {
       );
     }
 
-    final TareaController controlador = Get.put(TareaController());
-    controlador.cargarTareasPorAsignatura(asignatura.id);
+    // CORRECCIÓN: Inicializamos el controlador y le pasamos el id de la asignatura
+    final TareaController controlador = Get.put(
+      TareaController(asignaturaId: asignatura.id),
+    );
 
     return Scaffold(
       appBar: AppBar(title: Text(asignatura.nombre)),

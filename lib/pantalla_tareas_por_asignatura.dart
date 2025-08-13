@@ -35,6 +35,20 @@ class PantallaTareasPorAsignatura extends StatelessWidget {
         title: Text(asignatura.nombre, style: Theme.of(context).textTheme.titleLarge),
         backgroundColor: AppColors.background.withAlpha((255 * 0.8).round()), // usando withAlpha en lugar de withOpacity
         elevation: 0,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.calendar_today, color: AppColors.textPrimary),
+            onPressed: () {
+              Get.toNamed('/calendario/${asignatura.id}');
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.view_week, color: AppColors.textPrimary),
+            onPressed: () {
+              Get.toNamed('/vista_semanal/${asignatura.id}');
+            },
+          ),
+        ],
       ),
       body: Obx(() {
         if (controlador.estaCargando.value) {

@@ -32,9 +32,8 @@ class AuthService {
       }
 
       return userCredential;
-    } on FirebaseAuthException catch (e) {
+    } on FirebaseAuthException {
       // Manejar errores de Firebase Auth aquí
-      print('Error de registro: $e');
       return null;
     }
   }
@@ -46,9 +45,8 @@ class AuthService {
         password: password,
       );
       return userCredential;
-    } on FirebaseAuthException catch (e) {
+    } on FirebaseAuthException {
       // Manejar errores como usuario no encontrado o contraseña incorrecta
-      print('Error de inicio de sesión: $e');
       return null;
     }
   }

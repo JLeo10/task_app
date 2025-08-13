@@ -1,56 +1,47 @@
-plan de trabajo - task app
+# Tareas Universitarias: Tu Gestor de Tareas Académicas
 
-* leo: gestion de estado con getx, persistencia de datos (getstorage/firebase) y apis simuladas
-* kat: interfaz de usuario (ui), validaciones de formularios y vistas de tareas
-* andy: navegacion, flujo de la aplicacion, manejo de fechas y crud de asignaturas y tareas
+## Descripción del Proyecto
+"Tareas Universitarias" es una aplicación móvil diseñada para ayudar a estudiantes a organizar y gestionar sus responsabilidades académicas de manera eficiente. Permite a los usuarios registrar y hacer seguimiento de sus tareas, asignarlas a asignaturas específicas y monitorear su progreso. La aplicación busca simplificar la vida académica, asegurando que ninguna fecha de entrega importante sea olvidada.
 
-estado actual del proyecto (5 de agosto de 2025)
+## Funcionalidades Clave
 
-implementado
+*   **Registro e Inicio de Sesión Seguro:** Autenticación de usuarios a través de Firebase para garantizar la seguridad y persistencia de los datos.
+*   **Gestión Completa de Asignaturas (CRUD):**
+    *   **Crear:** Añade nuevas asignaturas a tu lista.
+    *   **Leer:** Visualiza todas tus asignaturas registradas.
+    *   **Actualizar:** Modifica los detalles de tus asignaturas existentes.
+    *   **Eliminar:** Remueve asignaturas que ya no necesites.
+*   **Gestión Detallada de Tareas por Asignatura (CRUD):**
+    *   **Crear:** Registra nuevas tareas con título, descripción, fecha de entrega y estado.
+    *   **Leer:** Consulta tus tareas organizadas por asignatura.
+    *   **Actualizar:** Edita cualquier detalle de tus tareas.
+    *   **Eliminar:** Borra tareas completadas o canceladas.
+*   **Visualización Flexible de Tareas:**
+    *   **Por Asignatura:** Organiza y visualiza tus tareas agrupadas por cada materia.
+    *   **Vista Semanal:** Consulta tus tareas organizadas por día de la semana.
+    *   **Vista de Calendario:** Visualiza tus tareas en un calendario interactivo, con la posibilidad de ver tareas por día.
+*   **Control de Progreso:** Marca tareas como completadas para llevar un registro claro de tus logros.
+*   ~~Notificaciones de Recordatorio (Opcional):~~ *Funcionalidad eliminada para simplificar el proyecto y evitar problemas de configuración.*
 
-* crud de asignaturas funcional (datos simulados)
-  * ver lista de asignaturas: pantallahome muestra todas las asignaturas
-  * añadir nuevas asignaturas: dialogo permite crear asignaturas
-  * editar asignaturas: permite cambiar nombre de asignaturas existentes
-  * eliminar asignaturas: permite borrar asignaturas de la lista
-* crud de tareas funcional (datos simulados)
-  * ver lista de tareas: pantallatareaporasignatura muestra tareas de asignatura especifica
-  * añadir nuevas tareas: permite añadir tareas asociadas a una asignatura
-  * editar tareas: permite editar tareas existentes
-  * marcar tareas como completadas: permite cambiar estado de una tarea
-  * eliminar tareas: permite borrar una tarea
-* navegacion
-  * de pantallahome a pantallatareaporasignatura (pasando la asignatura)
-  * de pantallatareaporasignatura a pantallaagregareditartarea (para añadir tareas a la asignatura actual)
-  * de pantalladetalltarea a pantallaagregareditartarea (para editar una tarea existente)
-* manejo de fechas
-  * implementado datepicker en pantallaagregareditartarea para seleccionar fecha de entrega
-  * fecha de entrega se muestra formateada en pantalladetalltarea
-* gestion de estado con getx
-  * controladorasignaturas y controladortareas manejan la logica de negocio
+## Componentes Técnicos Destacados
 
-para kat (diseño de ui)
+*   **Manejo de Fechas:** Implementación robusta con `DateTime` y `DatePicker` para una gestión intuitiva de fechas de entrega.
+*   **Navegación:** Utilización de `go_router` para una navegación fluida y estructurada entre las diferentes secciones de la aplicación.
+*   **Gestión de Estado:** Empleo de `GetX` para un manejo de estado reactivo y eficiente, garantizando una interfaz de usuario dinámica.
+*   **Persistencia de Datos:**
+    *   **Firebase Firestore:** Almacenamiento remoto y en tiempo real de todas las asignaturas y tareas, permitiendo la sincronización entre dispositivos.
+    *   **GetStorage (para futuras implementaciones):** Preparado para una posible persistencia local inicial para otros módulos o configuraciones de usuario.
+*   **Consumo de APIs Simuladas (para desarrollo):** Posibilidad de integrar `JSON Server` o `MockAPI` para simular el consumo de datos durante el desarrollo.
+*   **Validaciones de Formularios:** Implementación de validaciones para asegurar la integridad de los datos ingresados por el usuario.
+*   **Controladores de Texto:** Uso adecuado de `TextEditingController` para una interacción precisa con los campos de entrada de texto.
 
-* reemplazar vistas temporales
-  * pantallahome: necesita nuevo diseño para mostrar lista de asignaturas
-  * pantallaagregareditartarea: crear formulario funcional para añadir/editar tareas
-  * pantalladetalltarea: requiere diseño para mostrar detalles de una tarea
-  * pantallatareaporasignatura: necesita diseño para mostrar tareas de una asignatura
-  * diseñar dialogo de añadir/editar asignatura en pantallahome
-* componentes a crear
-  * selector de asignaturas en formulario de tareas
-  * selector de fecha (datepicker) en formulario
+## Nota para la Entrega
 
-para leo (datos y backend)
+*   **Repositorio del Proyecto:** Asegúrate de que el repositorio refleje las contribuciones de todos los miembros del equipo. La participación equitativa es fundamental.
+*   **README Completo:** Este archivo debe contener la descripción detallada de la aplicación y la lista de los integrantes del equipo.
 
-* implementar persistencia con getstorage
-  * reemplazar logica simulada en proveedortareas y proveedorasignaturas
-  * metodos (agregartarea, eliminarasignatura, etc) deben guardar y leer datos de getstorage
-* ids reales
-  * creacion de tareas y asignaturas usa id temporal (datetime.now)
-  * cambiar por sistema de ids mas robusto (ej contador o uuid)
-
-prosimamente (andy)
-
-* revision general del codigo
-* verificar cambios y adaptar
+## Integrantes del Equipo
+*   [Nombre del Integrante 1]
+*   [Nombre del Integrante 2]
+*   [Nombre del Integrante 3]
+*   [Nombre del Integrante 4]

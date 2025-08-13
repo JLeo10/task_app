@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:task_app/application/controlador_asignaturas.dart';
+
 import 'package:task_app/application/controlador_tareas.dart';
-import 'package:task_app/config/theme.dart';
 import 'package:task_app/models/asignaturas_model.dart';
 import 'package:task_app/models/tarea_model.dart';
-import 'package:task_app/shared/widgets/custom_textfield.dart';
-import 'package:task_app/shared/widgets/primary_button.dart';
 
-// pantalla para crear o editar una tarea
 class PantallaAgregarEditarTarea extends StatefulWidget {
   const PantallaAgregarEditarTarea({super.key});
 
@@ -26,25 +22,26 @@ class _PantallaAgregarEditarTareaState extends State<PantallaAgregarEditarTarea>
 
   Asignatura? _asignatura;
   Tarea? _tareaParaEditar;
-  bool esEdicion = false;
+  bool _esEdicion = false;
 
   @override
   void initState() {
     super.initState();
-    // determinamos si estamos editando o creando una tarea nueva
-    final args = Get.arguments;
-    if (args is Asignatura) {
-      _asignatura = args;
-      esEdicion = false;
-    } else if (args is Tarea) {
-      _tareaParaEditar = args;
-      esEdicion = true;
-      _asignatura = Get.find<AsignaturaController>().asignaturas.firstWhereOrNull((a) => a.id == _tareaParaEditar?.idAsignatura);
-      _tituloController.text = _tareaParaEditar?.titulo ?? '';
-      _descripcionController.text = _tareaParaEditar?.descripcion ?? '';
-      _fechaSeleccionada = _tareaParaEditar?.fechaEntrega;
-      if (_fechaSeleccionada != null) {
-        _fechaEntregaController.text = DateFormat('dd/MM/yyyy').format(_fechaSeleccionada!);
+    final args = Get.arguments as Map<String, dynamic>?;
+
+    if (args != null) {
+      _asignatura = args['asignatura'] as Asignatura?;
+      _tareaParaEditar = args['tarea'] as Tarea?;
+      _esEdicion = _tareaParaEditar != null;
+
+      if (_esEdicion) {
+        _tituloController.text = _tareaParaEditar!.titulo;
+        _descripcionController.text = _tareaParaEditar!.descripcion;
+        _fechaSeleccionada = _tareaParaEditar!.fechaEntrega;
+        if (_fechaSeleccionada != null) {
+          _fechaEntregaController.text =
+              DateFormat('dd/MM/yyyy').format(_fechaSeleccionada!);
+        }
       }
     }
   }
@@ -57,21 +54,18 @@ class _PantallaAgregarEditarTareaState extends State<PantallaAgregarEditarTarea>
     super.dispose();
   }
 
-  // funcion para mostrar el selector de fecha
   Future<void> _seleccionarFecha(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: _fechaSeleccionada ?? DateTime.now(),
-      firstDate: DateTime(2000),
+      firstDate: DateTime.now(),
       lastDate: DateTime(2101),
-      // aplicamos el tema personalizado al datepicker
       builder: (context, child) {
         return Theme(
-          data: darkTheme.copyWith(
-            colorScheme: darkTheme.colorScheme.copyWith(
-              surface: AppColors.surface,
-              onSurface: AppColors.textPrimary,
-            ),
+          data: Theme.of(context).copyWith(
+            colorScheme: Theme.of(context).colorScheme.copyWith(
+              primary: Theme.of(context).colorScheme.primary,
+            )
           ),
           child: child!,
         );
@@ -85,20 +79,30 @@ class _PantallaAgregarEditarTareaState extends State<PantallaAgregarEditarTarea>
     }
   }
 
-  // funcion para guardar la tarea
   void _guardarTarea() {
     if (!(_formKey.currentState?.validate() ?? false)) return;
     if (_fechaSeleccionada == null) {
-      Get.snackbar('Error', 'Debes seleccionar una fecha de entrega.', backgroundColor: AppColors.surface, colorText: AppColors.textPrimary);
+      Get.snackbar(
+        'Campo Requerido',
+        'Por favor, selecciona una fecha de entrega.',
+        backgroundColor: Theme.of(context).colorScheme.error,
+        colorText: Colors.white,
+      );
       return;
     }
     if (_asignatura == null) {
-      Get.snackbar('Error', 'La asignatura no se pudo cargar.', backgroundColor: AppColors.surface, colorText: AppColors.textPrimary);
+      Get.snackbar(
+        'Error',
+        'No se ha proporcionado una asignatura válida.',
+        backgroundColor: Theme.of(context).colorScheme.error,
+        colorText: Colors.white,
+      );
       return;
     }
 
     final controlador = Get.find<TareaController>();
-    if (esEdicion) {
+
+    if (_esEdicion) {
       final tareaActualizada = _tareaParaEditar!.copyWith(
         titulo: _tituloController.text,
         descripcion: _descripcionController.text,
@@ -107,11 +111,12 @@ class _PantallaAgregarEditarTareaState extends State<PantallaAgregarEditarTarea>
       controlador.actualizarTarea(tareaActualizada);
     } else {
       final nuevaTarea = Tarea(
-        id: '',
+        id: '', // Firestore generará el ID
         idAsignatura: _asignatura!.id,
         titulo: _tituloController.text,
         descripcion: _descripcionController.text,
         fechaEntrega: _fechaSeleccionada!,
+        estaCompletada: false,
       );
       controlador.agregarTarea(nuevaTarea);
     }
@@ -122,9 +127,7 @@ class _PantallaAgregarEditarTareaState extends State<PantallaAgregarEditarTarea>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(esEdicion ? 'Editar Tarea' : 'Nueva Tarea'),
-        backgroundColor: AppColors.background.withAlpha((255 * 0.8).round()), // usando withAlpha en lugar de withOpacity
-        elevation: 0,
+        title: Text(_esEdicion ? 'Editar Tarea' : 'Nueva Tarea'),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24.0),
@@ -133,32 +136,34 @@ class _PantallaAgregarEditarTareaState extends State<PantallaAgregarEditarTarea>
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // campo para el titulo
-              CustomTextField(
+              TextFormField(
                 controller: _tituloController,
-                label: 'Título',
-                validator: (v) => v == null || v.isEmpty ? 'el título es obligatorio' : null,
+                decoration: const InputDecoration(labelText: 'Título'),
+                validator: (value) =>
+                    value?.isEmpty ?? true ? 'El título es obligatorio' : null,
               ),
               const SizedBox(height: 16),
-              // campo para la descripcion
-              CustomTextField(
+              TextFormField(
                 controller: _descripcionController,
-                label: 'Descripción (opcional)',
+                decoration: const InputDecoration(labelText: 'Descripción (Opcional)'),
+                maxLines: 3,
               ),
               const SizedBox(height: 16),
-              // campo para la fecha de entrega
-              CustomTextField(
+              TextFormField(
                 controller: _fechaEntregaController,
-                label: 'Fecha de Entrega',
+                decoration: const InputDecoration(
+                  labelText: 'Fecha de Entrega',
+                  prefixIcon: Icon(Icons.calendar_today_outlined),
+                ),
                 readOnly: true,
                 onTap: () => _seleccionarFecha(context),
-                suffixIcon: const Icon(Icons.calendar_today_rounded, color: AppColors.textSecondary),
+                validator: (value) =>
+                    value?.isEmpty ?? true ? 'Selecciona una fecha' : null,
               ),
               const SizedBox(height: 32),
-              // boton para guardar
-              PrimaryButton(
-                text: esEdicion ? 'Guardar Cambios' : 'Guardar Tarea',
+              ElevatedButton(
                 onPressed: _guardarTarea,
+                child: Text(_esEdicion ? 'Guardar Cambios' : 'Crear Tarea'),
               ),
             ],
           ),

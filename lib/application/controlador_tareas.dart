@@ -19,7 +19,6 @@ class TareaController extends GetxController {
   void onInit() {
     super.onInit();
     estaCargando(true);
-    print('Cargando tareas para la asignatura con ID: $asignaturaId');
 
     _tareasSubscription?.cancel();
     _tareasSubscription = _firebaseService

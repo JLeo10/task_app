@@ -52,7 +52,7 @@ final ThemeData darkTheme = ThemeData(
   ),
 
   // estilo para las tarjetas
-  cardTheme: CardTheme(
+  cardTheme: CardThemeData( // cambiado de CardTheme a CardThemeData
     color: AppColors.surface,
     elevation: 0,
     shape: RoundedRectangleBorder(
@@ -92,10 +92,9 @@ final ThemeData darkTheme = ThemeData(
     primary: AppColors.primary,
     secondary: AppColors.secondary,
     surface: AppColors.surface,
-    background: AppColors.background,
+    // background y onBackground estan deprecados, usamos surface y onSurface
     onPrimary: AppColors.background,
     onSecondary: AppColors.textPrimary,
     onSurface: AppColors.textPrimary,
-    onBackground: AppColors.textPrimary,
   ),
 );

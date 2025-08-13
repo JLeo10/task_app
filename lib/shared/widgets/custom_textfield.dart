@@ -8,6 +8,8 @@ class CustomTextField extends StatelessWidget {
   final bool obscureText;
   final TextInputType? keyboardType;
   final Widget? suffixIcon;
+  final bool readOnly; // nuevo parametro para hacer el campo de solo lectura
+  final GestureTapCallback? onTap; // nuevo parametro para manejar taps
 
   const CustomTextField({
     super.key,
@@ -17,6 +19,8 @@ class CustomTextField extends StatelessWidget {
     this.obscureText = false,
     this.keyboardType,
     this.suffixIcon,
+    this.readOnly = false, // valor por defecto
+    this.onTap,
   });
 
   @override
@@ -28,6 +32,8 @@ class CustomTextField extends StatelessWidget {
       validator: validator,
       obscureText: obscureText,
       keyboardType: keyboardType,
+      readOnly: readOnly, // pasamos el parametro a textformfield
+      onTap: onTap, // pasamos el parametro a textformfield
       decoration: InputDecoration(
         labelText: label, // usamos labeltext en lugar de hinttext para una mejor ux
         suffixIcon: suffixIcon,

@@ -6,6 +6,7 @@ import 'package:task_app/models/asignaturas_model.dart';
 import 'package:task_app/shared/widgets/custom_textfield.dart';
 import 'package:task_app/shared/widgets/glass_card.dart';
 import 'package:task_app/shared/widgets/primary_button.dart';
+import 'package:task_app/modules/auth/controllers/auth_controller.dart'; // importamos el authcontroller
 
 // pantalla principal que muestra la lista de asignaturas
 class PantallaHome extends StatelessWidget {
@@ -14,12 +15,23 @@ class PantallaHome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AsignaturaController controlador = Get.put(AsignaturaController());
+    final AuthController authController = Get.find<AuthController>(); // obtenemos el authcontroller
 
     return Scaffold(
       appBar: AppBar(
         title: Text('Mis Asignaturas', style: Theme.of(context).textTheme.titleLarge),
-        backgroundColor: AppColors.background.withOpacity(0.8),
+        backgroundColor: AppColors.background.withAlpha((255 * 0.8).round()), // usando withAlpha en lugar de withOpacity
         elevation: 0,
+        actions: [
+          // boton de cerrar sesion
+          IconButton(
+            icon: const Icon(Icons.logout_rounded, color: AppColors.textSecondary),
+            onPressed: () {
+              authController.logout(); // llamamos al metodo logout
+            },
+            tooltip: 'Cerrar Sesión',
+          ),
+        ],
       ),
       body: Obx(() {
         // estado de carga

@@ -30,7 +30,7 @@ class PantallaTareasPorAsignatura extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(asignatura.nombre, style: Theme.of(context).textTheme.titleLarge),
-        backgroundColor: AppColors.background.withOpacity(0.8),
+        backgroundColor: AppColors.background.withAlpha((255 * 0.8).round()), // usando withAlpha en lugar de withOpacity
         elevation: 0,
       ),
       body: Obx(() {

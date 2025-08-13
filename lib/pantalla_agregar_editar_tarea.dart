@@ -123,7 +123,7 @@ class _PantallaAgregarEditarTareaState extends State<PantallaAgregarEditarTarea>
     return Scaffold(
       appBar: AppBar(
         title: Text(esEdicion ? 'Editar Tarea' : 'Nueva Tarea'),
-        backgroundColor: AppColors.background.withOpacity(0.8),
+        backgroundColor: AppColors.background.withAlpha((255 * 0.8).round()), // usando withAlpha en lugar de withOpacity
         elevation: 0,
       ),
       body: SingleChildScrollView(

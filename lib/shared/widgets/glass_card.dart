@@ -22,11 +22,11 @@ class GlassCard extends StatelessWidget {
           padding: padding ?? const EdgeInsets.all(16.0),
           decoration: BoxDecoration(
             // color de la tarjeta con opacidad para el efecto de transparencia
-            color: AppColors.surface.withOpacity(0.5),
+            color: AppColors.surface.withAlpha((255 * 0.5).round()), // usando withAlpha en lugar de withOpacity
             borderRadius: BorderRadius.circular(12.0),
             border: Border.all(
               // borde sutil para definir la tarjeta
-              color: AppColors.border.withOpacity(0.3),
+              color: AppColors.border.withAlpha((255 * 0.3).round()), // usando withAlpha en lugar de withOpacity
               width: 1.5,
             ),
           ),
